@@ -164,8 +164,25 @@ class BaseConnectionClassTestCase(unittest.TestCase):
     def test_proxy_is_bypassed_for_no_proxy_hosts(self):
         # Regression test for GITHUB-2077: an explicitly configured proxy must
         # not be used for hosts listed in the no_proxy environment variable.
+        old_no_proxy = os.environ.get("no_proxy")
+        old_NO_PROXY = os.environ.get("NO_PROXY")
         os.environ["no_proxy"] = "internal.example.com"
-        self.addCleanup(os.environ.pop, "no_proxy", None)
+        # Pin NO_PROXY too: an externally-set uppercase variable must not leak
+        # into this test, and our addCleanup must restore (not drop) whatever
+        # was there before, since it runs after tearDown().
+        os.environ.pop("NO_PROXY", None)
+
+        def restore_proxy_env():
+            for name, value in (
+                ("no_proxy", old_no_proxy),
+                ("NO_PROXY", old_NO_PROXY),
+            ):
+                if value is None:
+                    os.environ.pop(name, None)
+                else:
+                    os.environ[name] = value
+
+        self.addCleanup(restore_proxy_env)
 
         conn = LibcloudConnection(host="internal.example.com", port=443)
         conn.set_http_proxy("http://proxy.example.com:3128")
