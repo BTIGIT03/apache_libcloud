@@ -21,8 +21,8 @@ verification, depending on libcloud.security settings.
 import warnings
 
 import requests
-from requests.adapters import HTTPAdapter
 from requests.utils import should_bypass_proxies
+from requests.adapters import HTTPAdapter
 
 try:
     # requests no longer vendors urllib3 in newer versions
