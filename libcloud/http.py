@@ -34,7 +34,6 @@ except ImportError:
 import libcloud.security
 from libcloud.utils.py3 import urlparse
 
-
 __all__ = ["LibcloudBaseConnection", "LibcloudConnection"]
 
 ALLOW_REDIRECTS = 1
