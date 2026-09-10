@@ -131,7 +131,12 @@ class LibcloudBaseConnection:
             return None
 
         if should_bypass_proxies(url, no_proxy=None):
-            return {}
+            # Explicitly disable the configured schemes. Returning {} is not
+            # enough: requests merges per-request proxies with the session
+            # proxies, so the session-level proxy would be merged back in.
+            # ``None`` values are stripped by requests' merge, leaving an
+            # empty effective mapping.
+            return {"http": None, "https": None}
 
         return None
 
