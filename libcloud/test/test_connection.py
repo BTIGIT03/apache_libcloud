@@ -253,9 +253,7 @@ class BaseConnectionClassTestCase(unittest.TestCase):
             conn.request("GET", "/path")
 
             # The session proxy must not leak back in via requests' merge.
-            self.assertNotIn(
-                "http://proxy.example.com:3128", captured["proxies"].values()
-            )
+            self.assertNotIn("http://proxy.example.com:3128", captured["proxies"].values())
             self.assertIsNone(select_proxy(captured["url"], captured["proxies"]))
 
             # Control: a host that is not bypassed still uses the proxy.
@@ -263,9 +261,7 @@ class BaseConnectionClassTestCase(unittest.TestCase):
             conn.set_http_proxy("http://proxy.example.com:3128")
             conn.request("GET", "/path")
 
-            self.assertEqual(
-                captured["proxies"].get("http"), "http://proxy.example.com:3128"
-            )
+            self.assertEqual(captured["proxies"].get("http"), "http://proxy.example.com:3128")
             self.assertEqual(
                 select_proxy(captured["url"], captured["proxies"]),
                 "http://proxy.example.com:3128",

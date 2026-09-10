@@ -113,7 +113,6 @@ class LibcloudBaseConnection:
             "https": proxy_url,
         }
 
-
     def _proxies_for_url(self, url):
         """
         Return the proxy mapping to use for ``url``.
